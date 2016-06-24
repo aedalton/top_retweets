@@ -12,9 +12,11 @@ The app refreshes (reprints the top ten retweets in the last n minutes) every 10
 
 The top retweets are determined by the amount of times a tweet has been seen (processed by the program) within the rolling window of time. 
 
-Due to the nature of the hash (described below), at times certain RTs with identical text may appear in the top ten list. The hash is built on tweet IDs, with any retweeted tweets being added as sightings to the the original tweets ID in the hash. If the text has been copy/pasted, for example, it would not have the same ID as another, so it will show up as a discrete hash entry with possible RTs coming from its ID. 
+Due to the nature of the hash (described below), at times certain RTs with identical text may appear in the top ten list. The hash is built on tweet IDs, with any retweeted tweets being added as sightings to the the original tweets ID in the hash. If the text has been copy/pasted, for example, it would not have the same ID as another, so it will show up as a discrete hash entry with possible RTs coming from its ID.
 
-Twitter Streaming API requires a filter with at least track or a location parameter. This is currently set to one of the top retweeted users, Harry_Styles. 
+Potential solution to the above would be to utilize short urls, as found in tweet.entities['urls']; however, for the purposes of this MVP, and because not all tweets would have this RT short url, the tweet.id was used instead. 
+
+Twitter Streaming API requires a filter with at least track or a location parameter. This is currently set to one of the top retweeted users, Harry_Styles, but can also be set to the whole world (locations=[-180,-90,180,90]).  
 
 ### Modifications to Stream Listener
 
@@ -29,6 +31,9 @@ Twitter Streaming API requires a filter with at least track or a location parame
 	- pip install tweepy 
 
 	- Obtain Twitter Credentials and set in ENV
+
+	For 3 Minute rolling window (for example):
+	- python dalton_submission.py 3
 
 ## Examples 
 ![Example 1](/img/example.png)

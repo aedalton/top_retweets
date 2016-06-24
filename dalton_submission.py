@@ -93,7 +93,8 @@ class StdOutListener(StreamListener):
         self.processed_tweets[id].append((data.text, data.created_at))
 
         count = len(self.processed_tweets[id]) -1
-
+        if count > 2:
+            print(id)
         lookup = self.processed_tweets[id] 
         return (lookup[-1][0], lookup[-1][1], count)
 
@@ -104,7 +105,7 @@ class StdOutListener(StreamListener):
         return tweets 
 
     def top_tweets(self, current):
-        top = sorted(current, key=lambda info: info[2], reverse = True) # EEK
+        top = sorted(current, key=lambda info: info[2], reverse = True)
 
         return top[:10] 
 
