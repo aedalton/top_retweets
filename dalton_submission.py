@@ -112,7 +112,7 @@ class StdOutListener(StreamListener):
         print(BLUE + BOLD + 'TOP RETWEETS ' + u'\U0001F4AC' + '  IN PAST ' + str(self.mins) + ' ' + u'\U0001F550' + BLUE + '  MINUTES SINCE ' + BLACK)
         print(datetime.utcnow().time())
         print("\n")
-        counter = 1 # wish could use 0
+        counter = 1
         for i in top: 
             print(BOLD + str(counter)+ NORMAL + ': ' + i[0].encode('utf-8'))
             print(BOLD + BLUE + '  RT count:  ' + BLACK + NORMAL +str(i[2]) + BOLD + '   Time:  ' + NORMAL + str(i[1]) + '\n')
