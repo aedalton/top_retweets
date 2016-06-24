@@ -30,6 +30,9 @@ Twitter Streaming API requires a filter with at least track or a location parame
 
 	- Obtain Twitter Credentials and set in ENV
 
+## Examples 
+![Example 1](/img/example.png)
+
 ## Libraries Used
 
 Python - https://github.com/tweepy/tweepy (example: https://github.com/tweepy/tweepy/blob/master/examples/streaming.py)
