@@ -20,6 +20,8 @@ NORMAL = '\033[0m'
 BLUE = '\033[94m'
 LBLUE = '\033[95m'
 BLACK = '\033[30m'
+EMOJI_SPEECH = u'\U0001F4AC'
+EMOJI_TIME = u'\U0001F550'
 
 COMMAND_ARGS = "command should match: python streaming.py n (where n is number of minutes) \n setting minutes to 2"
 DEFAULT_MINS = 2
@@ -85,34 +87,49 @@ class StdOutListener(StreamListener):
         :param data: a tweet returned from stream 
         """
 
-        if hasattr(data, 'retweeted_status'): # only difference is ID (key storage)
+        # the only difference between hash entries is ID (key storage), with RTs (repeated sightings)
+        # being hashed under the originating tweet's ID
+        if hasattr(data, 'retweeted_status'): 
             id = data.retweeted_status.id
         else: 
             id = data.id
-        
+
+        # Hash key values
         self.processed_tweets[id].append((data.text, data.created_at))
 
+        # RT count determined by the number of times we have seen the tweet (at this index)
+        # minus 1 to account for the default entry 
         count = len(self.processed_tweets[id]) -1
-        if count > 2:
-            print(id)
+        
         lookup = self.processed_tweets[id] 
         return (lookup[-1][0], lookup[-1][1], count)
 
     def refresh(self, mins, tweets): 
+        """ We take the current time and subtract n (to give the current window)
+        and remove any tweets that came before the window to update current_tweets
+        :param mins: n minutes ago, where n is defined by the user
+        :param tweets: current tweets in window
+        """
         start_time = datetime.utcnow() + timedelta(minutes=-mins) # the current one 
         tweets = filter(lambda twt: twt[1] > start_time, tweets)
 
         return tweets 
 
     def top_tweets(self, current):
+        """ Sorts the current_tweets in the window by tuple value RT count in descending order
+        returns the top ten of this measure
+        """
         top = sorted(current, key=lambda info: info[2], reverse = True)
 
         return top[:10] 
 
     def print_top(self, top):
-        print(BLUE + BOLD + 'TOP RETWEETS ' + u'\U0001F4AC' + '  IN PAST ' + str(self.mins) + ' ' + u'\U0001F550' + BLUE + '  MINUTES SINCE ' + BLACK)
+        """ Prints the rolling window
+        """
+        print(BLUE + BOLD + 'TOP RETWEETS ' + EMOJI_SPEECH + '  IN PAST ' + str(self.mins) + ' ' + EMOJI_TIME + BLUE + '  MINUTES SINCE ' + BLACK)
         print(datetime.utcnow().time())
         print("\n")
+
         counter = 1
         for i in top: 
             print(BOLD + str(counter)+ NORMAL + ': ' + i[0].encode('utf-8'))
@@ -124,11 +141,12 @@ class StdOutListener(StreamListener):
 
 if __name__ == '__main__':
     
-    l = StdOutListener() # odnt want to override init
+    l = StdOutListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
 
     stream = Stream(auth, l)
 
-    #** QUESTION: TWEEPY NEEDS A TRACK/LOCATION
-    stream.filter(track=['Harry_Styles'])#locations=[-180,-90,180,90])
+    # Not parameterized for purposes of demo, an alternative filter would be a worldview 
+    # or all global tweets at locations=[-180,-90,180,90])
+    stream.filter(track=['Harry_Styles'])
