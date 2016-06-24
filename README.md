@@ -18,11 +18,11 @@ Twitter Streaming API requires a filter with at least track or a location parame
 
 ### Modifications to Stream Listener
 
-	- On each new status in the stream, the data is processed and stored to a hash. The keys to this hash are tweet IDs: if the tweet is a retweet, the key is the tweet.retweet_status.id, or originating tweet's id; otherwise, the key is tweet.id. 
+- On each new status in the stream, the data is processed and stored to a hash. The keys to this hash are tweet IDs: if the tweet is a retweet, the key is the tweet.retweet_status.id, or originating tweet's id; otherwise, the key is tweet.id. 
 
-	- The values of in this hash are lists of tuples, (tweet.text, tweet.created_at), with a new tuple added at each tweet sighting. 
+- The values of in this hash are lists of tuples, (tweet.text, tweet.created_at), with a new tuple added at each tweet sighting. 
 
-	- This satisfies the spec of not using the retweet_count field, but rather counting the retweets in the context of the hash. 
+- This satisfies the spec of not using the retweet_count field, but rather counting the retweets in the context of the hash. 
 
 
 ## To Use 
